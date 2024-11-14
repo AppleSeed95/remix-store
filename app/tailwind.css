@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  @apply bg-white dark:bg-gray-950;
+
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+html {
+  font-size: 0.97656vw;
+  font-size: clamp(6px, 0.97656vw, 10px);
+  margin: 0;
+}
+@media print, screen and (max-width: 641px) {
+  html {
+    font-size: 1.5625vw;
+    font-size: clamp(6px, 1.5625vw, 10px);
+  }
+}
+
+.scrollbar-container-other::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-container::-webkit-scrollbar {
+  width: 5px; 
+  height: 20px;
+}
+
+/* Track */
+.scrollbar-container::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+/* Handle */
+.scrollbar-container::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+}
+
+/* Handle on hover */
+.scrollbar-container::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  display: block;
+  background: #555; /* Color of the scrollbar handle when hovered */
+}
+
+.scrollbar-x-container::-webkit-scrollbar {
+  width: 20px; 
+  height: 5px;
+}
+
+/* Track */
+.scrollbar-x-container::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+/* Handle */
+.scrollbar-x-container::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+}
+
+/* Handle on hover */
+.scrollbar-x-container::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  display: block;
+  background: #555; /* Color of the scrollbar handle when hovered */
+}
+
+.scrollbar-x-container-hidden::-webkit-scrollbar {
+  display: none;
+}
