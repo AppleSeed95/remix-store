@@ -14,7 +14,7 @@ interface SubMenuItem {
   name: string
 }
 
-interface SidebarMenu {
+export interface SidebarMenu {
   key: string,
   name: string,
   subMenu?: SubMenuItem[]
@@ -93,12 +93,12 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarMenu }) => {
                   onClick={() => handleExpandMainItem(mainItem.key)} />
               </div>
               <div className={clsx(
-                "w-full pt-2 pb-4 flex flex-col gap-2",
-                expandedMainItems.some(item => item === mainItem.key) ? "block" : "hidden"
+                "w-full flex flex-col gap-2",
+                expandedMainItems.some(item => item === mainItem.key) && mainItem.subMenu?.length ? "block pt-2 pb-4" : "hidden pt-0 pb-0"
               )}>
                 {
                   mainItem.subMenu?.map(subItem => (
-                    <div key={subItem.key} className="w-full flex justify-between items-center gap-2">
+                    <div key={subItem.key} className="w-full flex justify-between items-center gap-2 pl-4">
                       <FontAwesomeIcon icon={searchParams.getAll("sub_category").some(subCategory => subCategory === subItem.key) ? faSquareCheck : faSquare}
                         className="w-[2rem] h-[2rem] text-[#555] hover:cursor-pointer"
                         onClick={() => handleSelectedSubItem(subItem.key)} />

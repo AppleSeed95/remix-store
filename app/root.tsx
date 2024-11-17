@@ -26,6 +26,8 @@ import Sidebar from "./components/common/Sidebar";
 import KeywordSearchFilter from "./components/common/KeywordSearchFilter";
 import ProductTypeFilter from "./components/common/ProductTypeFilter";
 
+import { SidebarMenu } from "./components/common/Sidebar";
+
 config.autoAddCss = false;
 
 export const links: LinksFunction = () => [
@@ -43,22 +45,48 @@ export const links: LinksFunction = () => [
 
 export async function loader() {
   const ENV = {
-    SUPABASE_URL: process.env.SUPABASE_URL ,
+    SUPABASE_URL: process.env.SUPABASE_URL,
     PUBLIC_ANON_KEY: process.env.PUBLIC_ANON_KEY,
   };
 
   const { data, error } = await supabase
-    .from("category_entity_varchar")
-    .select("*");
+    .from('category_entity_varchar')
+    .select(`
+      *,
+      category_entity (
+        entity_id,
+        entity_type_id,
+        parent_id,
+        created_at,
+        updated_at,
+        is_active
+      )
+    `)
+    .eq('category_entity.is_active', true);
 
   if (error) {
     throw new Response('Error fetching users', { status: 500 });
   }
 
-  const realSidebarMenu = data.map(item => ({
-    key: String(item?.value_id ?? ""),
-    name: String(item?.value ?? ""),
-  }));
+  const realMainSubMenu: SidebarMenu[] = data.filter(item => !item.category_entity.parent_id)
+    .map(item => {
+      let mainItem = {
+        key: String(item?.value_id ?? ""),
+        name: String(item?.value ?? ""),
+        subMenu: []
+      }
+      return mainItem;
+    })
+
+  data
+    .filter(item => item.category_entity.parent_id)
+    .forEach(item => {
+      realMainSubMenu.find(mainItem => mainItem.key === String(item.category_entity.parent_id))
+        ?.subMenu?.push({
+          key: String(item?.value_id ?? ""),
+          name: String(item?.value ?? ""),
+        });
+    });
 
   const sidebarMenu = [
     {
@@ -275,7 +303,7 @@ export async function loader() {
   ]
 
   return json({
-    sidebarMenu: realSidebarMenu,
+    sidebarMenu: realMainSubMenu,
     productTypeList,
     ENV,
   });
